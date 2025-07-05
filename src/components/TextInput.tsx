@@ -1,13 +1,15 @@
 import { useState } from 'react';
-import send from '../assets/send.svg';
 
 interface TextInputProps {
     onSend?: (msg: string) => void;
+    disabled?: boolean;
 }
 
-export default function TextInput({ onSend }: TextInputProps) {
+export default function TextInput({ onSend, disabled }: TextInputProps) {
     const [value, setValue] = useState('');
     const [isSending, setIsSending] = useState(false);
+    const [endTime] = useState(() => Date.now() + 1 * 60 * 1000);
+    const [isTimeEnded, setIsTimeEnded] = useState(false);
 
     const handleSend = () => {
         if (isSending) return;
@@ -53,11 +55,12 @@ export default function TextInput({ onSend }: TextInputProps) {
                     color: '#111827',
                     background: 'transparent',
                 }}
+                disabled={disabled}
             />
             <button
                 className="no-hover-btn"
                 onClick={handleSend}
-                disabled={isSending}
+                disabled={isSending || disabled}
                 style={{
                     marginLeft: 8,
                     width: 32,
