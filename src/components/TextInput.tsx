@@ -7,10 +7,17 @@ interface TextInputProps {
 
 export default function TextInput({ onSend }: TextInputProps) {
     const [value, setValue] = useState('');
+    const [isSending, setIsSending] = useState(false);
 
     const handleSend = () => {
+        if (isSending) return;
+        if (!value.trim()) return;
+        setIsSending(true);
         if (onSend) onSend(value);
-        setValue('');
+        setTimeout(() => {
+            setValue('');
+            setIsSending(false);
+        }, 100);
     };
 
     return (
@@ -30,7 +37,12 @@ export default function TextInput({ onSend }: TextInputProps) {
                 placeholder="Type your message..."
                 value={value}
                 onChange={e => setValue(e.target.value)}
-                onKeyDown={e => { if (e.key === 'Enter') handleSend(); }}
+                onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleSend();
+                    }
+                }}
                 style={{
                     flex: 1,
                     border: 'none',
@@ -45,6 +57,7 @@ export default function TextInput({ onSend }: TextInputProps) {
             <button
                 className="no-hover-btn"
                 onClick={handleSend}
+                disabled={isSending}
                 style={{
                     marginLeft: 8,
                     width: 32,
