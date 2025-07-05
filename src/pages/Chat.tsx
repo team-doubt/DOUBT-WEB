@@ -22,6 +22,8 @@ export default function Chat() {
     const [isTimeEnded, setIsTimeEnded] = useState(false);
     const [endTime] = useState(() => Date.now() + 1 * 60 * 1000);
     const [voteProgress, setVoteProgress] = useState(0);
+    const [voteTargets, setVoteTargets] = useState<number[]>([]);
+    const [doubtAngles] = useState(() => Array.from({length: 5}, () => (Math.random() * 36 - 18)));
 
     const handleSend = (msg: string) => {
         if (msg.trim() === "") return;
@@ -51,6 +53,15 @@ export default function Chat() {
         raf = requestAnimationFrame(tick);
         return () => cancelAnimationFrame(raf);
     }, [isTimeEnded]);
+
+    const handleProfileClick = (idx: number) => {
+        if (idx === 4) return;
+        setVoteTargets(prev =>
+            prev.includes(idx)
+                ? prev.filter(i => i !== idx)
+                : [...prev, idx]
+        );
+    };
 
     return (
         <>
@@ -117,26 +128,68 @@ export default function Chat() {
                             <span className="overlay-text">Who's Human?</span>
                             <div style={{ display: 'flex', flexDirection: 'row', gap: 24, marginTop: 32 }}>
                                 {fakeChats.map((chat, idx) => (
-                                    <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                        <div style={{ width: 64, height: 64, borderRadius: 12, overflow: 'hidden', background: '#fff', border: '2px solid #d1d5db', marginBottom: 8 }}>
+                                    <div
+                                        key={idx}
+                                        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative', cursor: 'pointer' }}
+                                        onClick={() => handleProfileClick(idx)}
+                                    >
+                                        {voteTargets.includes(idx) && (
+                                            <div style={{
+                                                position: 'absolute',
+                                                top: 12,
+                                                left: '50%',
+                                                transform: `translateX(-50%) rotate(${doubtAngles[idx]}deg)`,
+                                                background: '#b84bb8',
+                                                color: '#fff',
+                                                fontWeight: 700,
+                                                fontSize: 36,
+                                                borderRadius: 8,
+                                                padding: '8px 32px',
+                                                zIndex: 2,
+                                                boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                                                textAlign: 'center',
+                                                fontFamily: 'serif',
+                                                pointerEvents: 'none',
+                                                whiteSpace: 'nowrap',
+                                            }}>Doubt</div>
+                                        )}
+                                        <div style={{ width: 128, height: 128, borderRadius: 12, overflow: 'hidden', background: '#fff', border: '2px solid #d1d5db', marginBottom: 8 }}>
                                             <img src={chat.avatar} alt={chat.username} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                         </div>
-                                        <span style={{ color: '#fff', fontWeight: 500, fontSize: 16, textAlign: 'center', maxWidth: 72, wordBreak: 'break-all' }}>{chat.username}</span>
+                                        <span style={{ color: '#fff', fontWeight: 500, fontSize: 18, textAlign: 'center', maxWidth: 128, wordBreak: 'break-all' }}>{chat.username}</span>
                                     </div>
                                 ))}
-                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                    <div style={{ width: 64, height: 64, borderRadius: 12, overflow: 'hidden', background: '#fff', border: '2px solid #d1d5db', marginBottom: 8 }}>
+                                <div
+                                    style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative', cursor: 'not-allowed', opacity: 0.5 }}
+                                >
+                                    {voteTargets.includes(4) && (
+                                        <div style={{
+                                            position: 'absolute',
+                                            top: 12,
+                                            left: '50%',
+                                            transform: `translateX(-50%) rotate(${doubtAngles[4]}deg)`,
+                                            background: '#b84bb8',
+                                            color: '#fff',
+                                            fontWeight: 700,
+                                            fontSize: 36,
+                                            borderRadius: 8,
+                                            padding: '8px 32px',
+                                            zIndex: 2,
+                                            boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                                            textAlign: 'center',
+                                            fontFamily: 'serif',
+                                            pointerEvents: 'none',
+                                            whiteSpace: 'nowrap',
+                                        }}>Doubt</div>
+                                    )}
+                                    <div style={{ width: 128, height: 128, borderRadius: 12, overflow: 'hidden', background: '#fff', border: '2px solid #d1d5db', marginBottom: 8 }}>
                                         <img src={myAvatar} alt={myUsername} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                     </div>
-                                    <span style={{ color: '#fff', fontWeight: 500, fontSize: 16, textAlign: 'center', maxWidth: 72, wordBreak: 'break-all' }}>{myUsername}</span>
+                                    <span style={{ color: '#fff', fontWeight: 500, fontSize: 18, textAlign: 'center', maxWidth: 128, wordBreak: 'break-all' }}>{myUsername}</span>
                                 </div>
                             </div>
                             <div style={{ width: 360, height: 12, background: 'rgba(255,255,255,0.2)', borderRadius: 6, marginTop: 40, overflow: 'hidden' }}>
-                                <div style={{
-                                    height: '100%',
-                                    width: `${voteProgress * 100}%`,
-                                    background: '#ffffff'
-                                }} />
+                                <div style={{ height: '100%', width: `${voteProgress * 100}%`, background: '#4f8cff' }} />
                             </div>
                         </div>
                     )}
