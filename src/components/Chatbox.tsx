@@ -16,7 +16,7 @@ export default function Chatbox({ message, username, avatar, time }: ChatboxProp
   return (
     <div className="flex w-full max-w-2xl py-4 px-2">
       
-      <div className="w-11 h-11 rounded-md bg-white overflow-hidden flex-shrink-0 mr-4 border">
+      <div className="w-11 h-11 rounded-md bg-white overflow-hidden flex-shrink-0 mr-4">
         <img src={_avatar} alt="avatar" className="w-full h-full object-cover" />
       </div>
       

@@ -3,20 +3,26 @@ import Chatbox from "../components/Chatbox";
 import TextInput from "../components/TextInput";
 import Header from "../components/Header";
 import { faker } from '@faker-js/faker';
+import blueProfile from '../assets/blue.svg';
+import greenProfile from '../assets/green.svg';
+import redProfile from '../assets/red.svg';
+import whiteProfile from '../assets/white.svg';
+import yellowProfile from '../assets/yellow.png';
 
-function createFakeChat() {
+function createFakeChat(idx: number) {
+    const avatars = [blueProfile, greenProfile, redProfile, whiteProfile];
     return {
         message: faker.lorem.sentence(),
         username: faker.internet.userName(),
-        avatar: faker.image.avatar(),
+        avatar: avatars[idx],
         time: faker.date.recent().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
 }
 
 export default function Chat() {
     const [messages, setMessages] = useState<string[]>([]);
-    const [fakeChats] = useState(() => Array.from({ length: 4 }, createFakeChat));
-    const [myAvatar] = useState(() => faker.image.avatar());
+    const [fakeChats] = useState(() => Array.from({ length: 4 }, (_, idx) => createFakeChat(idx)));
+    const [myAvatar] = useState(() => yellowProfile);
     const myUsername = '나';
     const chatListRef = useRef<HTMLDivElement>(null);
     const [isTimeEnded, setIsTimeEnded] = useState(false);
@@ -169,18 +175,9 @@ export default function Chat() {
                                                 whiteSpace: 'nowrap',
                                             }}>Doubt</div>
                                         )}
-                                        <div style={{ width: 128, height: 128, borderRadius: 12, overflow: 'hidden', background: '#fff', border: '2px solid #d1d5db', marginBottom: 8 }}>
+                                        <div style={{ width: 128, height: 128, borderRadius: 12, overflow: 'hidden', background: '#fff', marginBottom: 8 }}>
                                             <img src={chat.avatar} alt={chat.username} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                         </div>
-                                        <span style={{
-                                            color: resultRedIdxs.includes(idx) && isResult ? '#ff3b3b' : '#fff',
-                                            fontWeight: 500,
-                                            fontSize: 18,
-                                            textAlign: 'center',
-                                            maxWidth: 128,
-                                            wordBreak: 'break-all',
-                                            transition: 'color 0.3s'
-                                        }}>{chat.username}</span>
                                     </div>
                                 ))}
                                 <div
@@ -206,18 +203,9 @@ export default function Chat() {
                                             whiteSpace: 'nowrap',
                                         }}>Doubt</div>
                                     )}
-                                    <div style={{ width: 128, height: 128, borderRadius: 12, overflow: 'hidden', background: '#fff', border: '2px solid #d1d5db', marginBottom: 8 }}>
+                                    <div style={{ width: 128, height: 128, borderRadius: 12, overflow: 'hidden', background: '#fff', marginBottom: 8 }}>
                                         <img src={myAvatar} alt={myUsername} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                     </div>
-                                    <span style={{
-                                        color: resultRedIdxs.includes(4) && isResult ? '#ff3b3b' : '#fff',
-                                        fontWeight: 500,
-                                        fontSize: 18,
-                                        textAlign: 'center',
-                                        maxWidth: 128,
-                                        wordBreak: 'break-all',
-                                        transition: 'color 0.3s'
-                                    }}>{myUsername}</span>
                                 </div>
                             </div>
                             {!isResult && (

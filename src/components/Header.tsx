@@ -18,7 +18,7 @@ export default function Header({ onTimeEnd, endTime }: HeaderProps) {
             <Countdown
                 date={endTime}
                 renderer={({ minutes, seconds }) => (
-                <span className="ml-4 h-8 flex items-center text-white text-[28px]">
+                <span className="ml-4 h-8 flex items-center text-white text-[28px]" style={{ fontFamily: 'Zodiak, sans-serif' }}>
                     {minutes < 10 ? `0${minutes}` : minutes}:
                     {seconds < 10 ? `0${seconds}` : seconds}
                 </span>
