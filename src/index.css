@@ -66,3 +66,13 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.no-hover-btn,
+.no-hover-btn:focus,
+.no-hover-btn:hover,
+.no-hover-btn:active {
+  background: none !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
