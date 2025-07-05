@@ -24,6 +24,8 @@ export default function Chat() {
     const [voteProgress, setVoteProgress] = useState(0);
     const [voteTargets, setVoteTargets] = useState<number[]>([]);
     const [doubtAngles] = useState(() => Array.from({length: 5}, () => (Math.random() * 36 - 18)));
+    const [isResult, setIsResult] = useState(false);
+    const [resultRedIdxs, setResultRedIdxs] = useState<number[]>([]);
 
     const handleSend = (msg: string) => {
         if (msg.trim() === "") return;
@@ -39,6 +41,8 @@ export default function Chat() {
     useEffect(() => {
         if (!isTimeEnded) return;
         setVoteProgress(0);
+        setIsResult(false);
+        setResultRedIdxs([]);
         const start = Date.now();
         const duration = 60000; // 1분
         let raf: number;
@@ -48,6 +52,17 @@ export default function Chat() {
             setVoteProgress(progress);
             if (progress < 1) {
                 raf = requestAnimationFrame(tick);
+            } else {
+                // 프로그레스바 끝나면 result 모드 진입
+                setIsResult(true);
+                // 1~5개 랜덤 인덱스(중복X)
+                const count = Math.floor(Math.random() * 5) + 1;
+                const idxs = Array.from({length: 5}, (_, i) => i);
+                for (let i = idxs.length - 1; i > 0; i--) {
+                  const j = Math.floor(Math.random() * (i + 1));
+                  [idxs[i], idxs[j]] = [idxs[j], idxs[i]];
+                }
+                setResultRedIdxs(idxs.slice(0, count));
             }
         }
         raf = requestAnimationFrame(tick);
@@ -55,12 +70,13 @@ export default function Chat() {
     }, [isTimeEnded]);
 
     const handleProfileClick = (idx: number) => {
-        if (idx === 4) return;
-        setVoteTargets(prev =>
-            prev.includes(idx)
-                ? prev.filter(i => i !== idx)
-                : [...prev, idx]
-        );
+      if (isResult) return;
+      if (idx === 4) return;
+      setVoteTargets(prev =>
+        prev.includes(idx)
+          ? prev.filter(i => i !== idx)
+          : [...prev, idx]
+      );
     };
 
     return (
@@ -125,12 +141,12 @@ export default function Chat() {
                     </div>
                     {isTimeEnded && (
                         <div className="overlay" style={{ flexDirection: 'column' }}>
-                            <span className="overlay-text">Who's Human?</span>
+                            <span className="overlay-text">{isResult ? 'Result' : "Who's Human?"}</span>
                             <div style={{ display: 'flex', flexDirection: 'row', gap: 24, marginTop: 32 }}>
                                 {fakeChats.map((chat, idx) => (
                                     <div
                                         key={idx}
-                                        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative', cursor: 'pointer' }}
+                                        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative', cursor: isResult ? 'default' : 'pointer' }}
                                         onClick={() => handleProfileClick(idx)}
                                     >
                                         {voteTargets.includes(idx) && (
@@ -156,7 +172,15 @@ export default function Chat() {
                                         <div style={{ width: 128, height: 128, borderRadius: 12, overflow: 'hidden', background: '#fff', border: '2px solid #d1d5db', marginBottom: 8 }}>
                                             <img src={chat.avatar} alt={chat.username} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                         </div>
-                                        <span style={{ color: '#fff', fontWeight: 500, fontSize: 18, textAlign: 'center', maxWidth: 128, wordBreak: 'break-all' }}>{chat.username}</span>
+                                        <span style={{
+                                            color: resultRedIdxs.includes(idx) && isResult ? '#ff3b3b' : '#fff',
+                                            fontWeight: 500,
+                                            fontSize: 18,
+                                            textAlign: 'center',
+                                            maxWidth: 128,
+                                            wordBreak: 'break-all',
+                                            transition: 'color 0.3s'
+                                        }}>{chat.username}</span>
                                     </div>
                                 ))}
                                 <div
@@ -185,12 +209,22 @@ export default function Chat() {
                                     <div style={{ width: 128, height: 128, borderRadius: 12, overflow: 'hidden', background: '#fff', border: '2px solid #d1d5db', marginBottom: 8 }}>
                                         <img src={myAvatar} alt={myUsername} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                     </div>
-                                    <span style={{ color: '#fff', fontWeight: 500, fontSize: 18, textAlign: 'center', maxWidth: 128, wordBreak: 'break-all' }}>{myUsername}</span>
+                                    <span style={{
+                                        color: resultRedIdxs.includes(4) && isResult ? '#ff3b3b' : '#fff',
+                                        fontWeight: 500,
+                                        fontSize: 18,
+                                        textAlign: 'center',
+                                        maxWidth: 128,
+                                        wordBreak: 'break-all',
+                                        transition: 'color 0.3s'
+                                    }}>{myUsername}</span>
                                 </div>
                             </div>
-                            <div style={{ width: 360, height: 12, background: 'rgba(255,255,255,0.2)', borderRadius: 6, marginTop: 40, overflow: 'hidden' }}>
-                                <div style={{ height: '100%', width: `${voteProgress * 100}%`, background: '#4f8cff' }} />
-                            </div>
+                            {!isResult && (
+                                <div style={{ width: 360, height: 12, background: 'rgba(255,255,255,0.2)', borderRadius: 6, marginTop: 40, overflow: 'hidden' }}>
+                                    <div style={{ height: '100%', width: `${voteProgress * 100}%`, background: '#4f8cff' }} />
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>
