@@ -139,6 +139,7 @@ export default function Chat() {
                                 username={myUsername}
                                 avatar={myAvatar}
                                 time={new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                isMine={true}
                             />
                         ))}
                     </div>
@@ -147,7 +148,7 @@ export default function Chat() {
                     </div>
                     {isTimeEnded && (
                         <div className="overlay" style={{ flexDirection: 'column' }}>
-                            <span className="overlay-text">{isResult ? 'Result' : "Who's Human?"}</span>
+                            <span className="overlay-text">{isResult ? 'Result' : "Who's AI?"}</span>
                             <div style={{ display: 'flex', flexDirection: 'row', gap: 24, marginTop: 32 }}>
                                 {fakeChats.map((chat, idx) => (
                                     <div
@@ -165,7 +166,6 @@ export default function Chat() {
                                                 color: '#fff',
                                                 fontWeight: 700,
                                                 fontSize: 36,
-                                                borderRadius: 8,
                                                 padding: '8px 32px',
                                                 zIndex: 2,
                                                 boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
@@ -193,7 +193,6 @@ export default function Chat() {
                                             color: '#fff',
                                             fontWeight: 700,
                                             fontSize: 36,
-                                            borderRadius: 8,
                                             padding: '8px 32px',
                                             zIndex: 2,
                                             boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
