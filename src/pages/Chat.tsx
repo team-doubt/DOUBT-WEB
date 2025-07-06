@@ -109,6 +109,7 @@ export default function Chat() {
                         display: "flex",
                         flexDirection: "column",
                         overflow: "hidden",
+                        scrollbarWidth: 'none',
                         boxSizing: "border-box",
                         position: "relative",
                     }}
@@ -119,6 +120,7 @@ export default function Chat() {
                         style={{
                             flex: 1,
                             overflowY: "auto",
+                            scrollbarWidth: 'none',
                             padding: "32px 16px 16px 16px",
                             paddingBottom: 96,
                         }}
@@ -175,7 +177,7 @@ export default function Chat() {
                                                 whiteSpace: 'nowrap',
                                             }}>Doubt</div>
                                         )}
-                                        <div style={{ width: 128, height: 128, borderRadius: 12, overflow: 'hidden', background: '#fff', marginBottom: 8 }}>
+                                        <div style={{ width: 128, height: 128, borderRadius: 12, overflow: 'hidden', scrollbarWidth: 'none', background: '#fff', marginBottom: 8 }}>
                                             <img src={chat.avatar} alt={chat.username} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                         </div>
                                     </div>
@@ -202,14 +204,14 @@ export default function Chat() {
                                             whiteSpace: 'nowrap',
                                         }}>Doubt</div>
                                     )}
-                                    <div style={{ width: 128, height: 128, borderRadius: 12, overflow: 'hidden', background: '#fff', marginBottom: 8 }}>
+                                    <div style={{ width: 128, height: 128, borderRadius: 12, overflow: 'hidden',scrollbarWidth: 'none', background: '#fff', marginBottom: 8 }}>
                                         <img src={myAvatar} alt={myUsername} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                     </div>
                                 </div>
                             </div>
                             {!isResult && (
                                 <div style={{ width: 360, height: 12, background: 'rgba(255,255,255,0.2)', borderRadius: 6, marginTop: 40, overflow: 'hidden' }}>
-                                    <div style={{ height: '100%', width: `${voteProgress * 100}%`, background: '#4f8cff' }} />
+                                    <div style={{ height: '100%', width: `${voteProgress * 100}%`, background: '#ffffff' }} />
                                 </div>
                             )}
                         </div>
