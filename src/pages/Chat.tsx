@@ -100,21 +100,8 @@ export default function Chat() {
                 }}
             >
                 <div
-                    style={{
-                        width: "700px",
-                        height: "calc(100vh - 48px)",
-                        backgroundImage: "url('/bg.svg')",
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                        backgroundRepeat: "no-repeat",
-                        display: "flex",
-                        flexDirection: "column",
-                        overflow: "hidden",
-                        scrollbarWidth: 'none',
-                        boxSizing: "border-box",
-                        position: "relative",
-                    }}
-                    className="mt-12"
+                    className="mt-12 w-[700px] h-[calc(100vh-48px)] flex flex-col overflow-hidden relative bg-cover bg-center bg-no-repeat"
+                    style={{ backgroundImage: isResult ? "url('/result_bg.svg')" : "url('/bg.svg')" }}
                 >
                     <div
                         ref={chatListRef}
@@ -163,7 +150,7 @@ export default function Chat() {
                                             
                                             <img src={sign} alt="" style={{ position: 'absolute', paddingBottom: 60, left: '50%', transform: `translateX(-50%) rotate(${doubtAngles[idx]}deg)`, width: 800, height: 200 }} />
                                         )}
-                                        <div style={{ width: 128, height: 128, borderRadius: 12, overflow: 'hidden', scrollbarWidth: 'none', background: '#fff', marginBottom: 8 }}>
+                                        <div style={{ width: 128, height: 128, overflow: 'hidden', scrollbarWidth: 'none', background: '#fff', marginBottom: 8 }}>
                                             <img src={chat.avatar} alt={chat.username} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                         </div>
                                     </div>
@@ -174,7 +161,7 @@ export default function Chat() {
                                     {voteTargets.includes(4) && (
                                         <img src={sign} alt="" style={{ position: 'absolute', paddingBottom: 60, left: '50%', transform: `translateX(-50%) rotate(${doubtAngles[4]}deg)`, width: 800, height: 200 }} />
                                     )}
-                                    <div style={{ width: 128, height: 128, borderRadius: 12, overflow: 'hidden',scrollbarWidth: 'none', background: '#fff', marginBottom: 8 }}>
+                                    <div style={{ width: 128, height: 128, overflow: 'hidden',scrollbarWidth: 'none', background: '#fff', marginBottom: 8 }}>
                                         <img src={myAvatar} alt={myUsername} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                     </div>
                                 </div>
