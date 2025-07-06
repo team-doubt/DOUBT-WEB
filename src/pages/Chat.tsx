@@ -8,6 +8,7 @@ import greenProfile from '../assets/green.svg';
 import redProfile from '../assets/red.svg';
 import whiteProfile from '../assets/white.svg';
 import yellowProfile from '../assets/yellow.png';
+import sign from '../assets/sign.svg';
 
 function createFakeChat(idx: number) {
     const avatars = [blueProfile, greenProfile, redProfile, whiteProfile];
@@ -26,7 +27,7 @@ export default function Chat() {
     const myUsername = '나';
     const chatListRef = useRef<HTMLDivElement>(null);
     const [isTimeEnded, setIsTimeEnded] = useState(false);
-    const [endTime] = useState(() => Date.now() + 1 * 60 * 1000);
+    const [endTime] = useState(() => Date.now() + 0.1 * 60 * 1000);
     const [voteProgress, setVoteProgress] = useState(0);
     const [voteTargets, setVoteTargets] = useState<number[]>([]);
     const [doubtAngles] = useState(() => Array.from({length: 5}, () => (Math.random() * 36 - 18)));
@@ -159,23 +160,8 @@ export default function Chat() {
                                         onClick={() => handleProfileClick(idx)}
                                     >
                                         {voteTargets.includes(idx) && (
-                                            <div style={{
-                                                position: 'absolute',
-                                                top: 12,
-                                                left: '50%',
-                                                transform: `translateX(-50%) rotate(${doubtAngles[idx]}deg)`,
-                                                background: '#b84bb8',
-                                                color: '#fff',
-                                                fontWeight: 700,
-                                                fontSize: 36,
-                                                padding: '8px 32px',
-                                                zIndex: 2,
-                                                boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-                                                textAlign: 'center',
-                                                fontFamily: 'serif',
-                                                pointerEvents: 'none',
-                                                whiteSpace: 'nowrap',
-                                            }}>Doubt</div>
+                                            
+                                            <img src={sign} alt="" style={{ position: 'absolute', paddingBottom: 60, left: '50%', transform: `translateX(-50%) rotate(${doubtAngles[idx]}deg)`, width: 800, height: 200 }} />
                                         )}
                                         <div style={{ width: 128, height: 128, borderRadius: 12, overflow: 'hidden', scrollbarWidth: 'none', background: '#fff', marginBottom: 8 }}>
                                             <img src={chat.avatar} alt={chat.username} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -186,23 +172,7 @@ export default function Chat() {
                                     style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative', cursor: 'not-allowed', opacity: 0.5 }}
                                 >
                                     {voteTargets.includes(4) && (
-                                        <div style={{
-                                            position: 'absolute',
-                                            top: 12,
-                                            left: '50%',
-                                            transform: `translateX(-50%) rotate(${doubtAngles[4]}deg)`,
-                                            background: '#b84bb8',
-                                            color: '#fff',
-                                            fontWeight: 700,
-                                            fontSize: 36,
-                                            padding: '8px 32px',
-                                            zIndex: 2,
-                                            boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-                                            textAlign: 'center',
-                                            fontFamily: 'serif',
-                                            pointerEvents: 'none',
-                                            whiteSpace: 'nowrap',
-                                        }}>Doubt</div>
+                                        <img src={sign} alt="" style={{ position: 'absolute', paddingBottom: 60, left: '50%', transform: `translateX(-50%) rotate(${doubtAngles[4]}deg)`, width: 800, height: 200 }} />
                                     )}
                                     <div style={{ width: 128, height: 128, borderRadius: 12, overflow: 'hidden',scrollbarWidth: 'none', background: '#fff', marginBottom: 8 }}>
                                         <img src={myAvatar} alt={myUsername} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -211,7 +181,7 @@ export default function Chat() {
                             </div>
                             {!isResult && (
                                 <div style={{ width: 360, height: 12, background: 'rgba(255,255,255,0.2)', borderRadius: 6, marginTop: 40, overflow: 'hidden' }}>
-                                    <div style={{ height: '100%', width: `${voteProgress * 100}%`, background: '#ffffff' }} />
+                                    <div style={{ height: '100%', width: `${voteProgress * 100}%`, background: '#ffffff', borderRadius: 6 }} />
                                 </div>
                             )}
                         </div>
