@@ -19,13 +19,16 @@ const myUser = { avatar: MY_USER.avatar, username: MY_USER.name };
 export default function Chat() {
   const { messages, gamePhase, addMessage, setGamePhase } = useChatStore();
 
-  // 로컬 상태들
+  // 투표 대상별 고정된 랜덤 각도를 생성하는 함수
+  const generateDoubtAngle = (targetIndex: number) => {
+    // targetIndex를 시드로 사용하여 일관된 랜덤값 생성
+    const seed = targetIndex * 123.456;
+    const pseudoRandom = Math.sin(seed) * 10000;
+    return (pseudoRandom - Math.floor(pseudoRandom)) * 36 - 18;
+  };
   const [endTime] = useState(() => Date.now() + GAME_CONFIG.CHAT_DURATION);
   const [voteProgress, setVoteProgress] = useState(0);
   const [voteTargets, setVoteTargets] = useState<number[]>([]);
-  const [doubtAngles] = useState(() =>
-    Array.from({ length: 5 }, () => Math.random() * 36 - 18)
-  );
   const [resultRedIdxs, setResultRedIdxs] = useState<number[]>([]);
 
   const myUsername = myUser.username;
@@ -195,7 +198,7 @@ export default function Chat() {
                           position: "absolute",
                           paddingBottom: 60,
                           left: "50%",
-                          transform: `translateX(-50%) rotate(${doubtAngles[idx]}deg)`,
+                          transform: `translateX(-50%) rotate(${generateDoubtAngle(idx)}deg)`,
                           width: 800,
                           height: 200,
                         }}
