@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Chatbox from "../components/Chatbox";
 import TextInput from "../components/TextInput";
 import Header from "../components/Header";
@@ -30,16 +30,16 @@ export default function Chat() {
 
   const myUsername = myUser.username;
   const myAvatar = myUser.avatar;
-  const chatListRef = useRef<HTMLDivElement>(null);
 
   const handleSend = (msg: string) => {
     addMessage(msg);
   };
 
-  // 스크롤 자동 이동
+  // 새 메시지 추가 시 자동 스크롤
   useEffect(() => {
-    if (chatListRef.current) {
-      chatListRef.current.scrollTop = chatListRef.current.scrollHeight;
+    const chatBottom = document.getElementById("chat-bottom");
+    if (chatBottom) {
+      chatBottom.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
 
@@ -114,28 +114,40 @@ export default function Chat() {
           }}
         >
           <div
-            ref={chatListRef}
             style={{
               flex: 1,
+              display: "flex",
+              flexDirection: "column",
               overflowY: "auto",
               scrollbarWidth: "none",
-              padding: "32px 16px 16px 16px",
-              paddingBottom: 96,
+              scrollBehavior: "smooth",
+              padding: "32px 16px 96px 16px",
             }}
           >
-            {messages.map((msg, idx) => (
-              <Chatbox
-                key={`mine-${idx}`}
-                message={msg}
-                username={myUsername}
-                avatar={myAvatar}
-                time={new Date().toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-                isMine={true}
-              />
-            ))}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "8px",
+                minHeight: "min-content",
+              }}
+            >
+              {messages.map((msg, idx) => (
+                <Chatbox
+                  key={`mine-${idx}`}
+                  message={msg}
+                  username={myUsername}
+                  avatar={myAvatar}
+                  time={new Date().toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                  isMine={true}
+                />
+              ))}
+              {/* 이 요소가 새 메시지 추가 시 자동 스크롤 타겟 */}
+              <div id="chat-bottom" />
+            </div>
           </div>
           <div
             style={{
