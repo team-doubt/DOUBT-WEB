@@ -4,23 +4,17 @@ import TextInput from "../components/TextInput";
 import Header from "../components/Header";
 import { useChatStore } from "../stores/chatStore";
 import { GamePhase } from "../types/chat";
-import {
-  GAME_CONFIG,
-  AVATARS,
-  MY_AVATAR,
-  MY_USERNAME,
-} from "../constants/game";
+import { GAME_CONFIG, USERS as GAME_USERS, MY_USER } from "../constants/game";
 import sign from "../assets/sign.svg";
 
-const USERS = [
-  { avatar: AVATARS[3], username: "튜링" }, // white
-  { avatar: AVATARS[0], username: "파스칼" }, // blue
-  { avatar: AVATARS[2], username: "오일러" }, // red
-  { avatar: AVATARS[1], username: "가우스" }, // green
-];
+// 게임 참여자들 (상수에서 바로 사용)
+const USERS = GAME_USERS.map((user) => ({
+  avatar: user.avatar,
+  username: user.name,
+}));
 
 // 노이만(노랑)이 me
-const myUser = { avatar: MY_AVATAR, username: MY_USERNAME };
+const myUser = { avatar: MY_USER.avatar, username: MY_USER.name };
 
 export default function Chat() {
   const { messages, gamePhase, addMessage, setGamePhase } = useChatStore();
