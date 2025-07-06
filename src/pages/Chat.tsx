@@ -198,7 +198,9 @@ export default function Chat() {
                           position: "absolute",
                           paddingBottom: 60,
                           left: "50%",
-                          transform: `translateX(-50%) rotate(${generateDoubtAngle(idx)}deg)`,
+                          transform: `translateX(-50%) rotate(${generateDoubtAngle(
+                            idx
+                          )}deg)`,
                           width: 800,
                           height: 200,
                         }}
