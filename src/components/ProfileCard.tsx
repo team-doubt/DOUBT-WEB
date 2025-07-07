@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { GamePhase } from "../types/chat";
+import { USERS } from "../constants/game";
 import sign from "../assets/sign.svg";
-import ai from "../assets/ai.svg";
+
+
 
 interface ProfileCardProps {
   avatar: string;
@@ -25,7 +27,7 @@ export default function ProfileCard({
   const isClickable = gamePhase !== GamePhase.RESULT && !isMyProfile;
 
   // 랜덤 각도를 한 번만 생성하고 고정 (-20도 ~ 20도)
-  const [doubtAngle] = useState(() => Math.floor(Math.random() * 41) - 20);
+  const [doubtAngle] = useState(() => Math.floor(Math.random() * 41) - 8);
 
   const handleClick = () => {
     if (isClickable && onClick) {
@@ -56,15 +58,15 @@ export default function ProfileCard({
         <img
           src={sign}
           alt=""
-          className="absolute pb-[60px] left-1/2 w-[1200px] h-[200px] select-none"
+          className="absolute pb-[60px] left-1/2 w-[1200px] h-[200px] select-none z-10"
           style={{
-            transform: `translateX(-50%) rotate(${doubtAngle}deg)`,
+            transform: `translateX(-50%) scale(1.3) rotate(${doubtAngle}deg)`,
           }}
         />
       )}
       <div className="w-32 h-32 overflow-hidden [scrollbar-width:none] mb-2 bg-white">
         <img
-          src={gamePhase === GamePhase.RESULT && isAI ? ai : avatar}
+          src={gamePhase === GamePhase.RESULT && isAI ? USERS.find(user => user.name === username)?.bot : avatar}
           alt={username}
           className="w-full h-full object-cover select-none"
         />
@@ -72,3 +74,4 @@ export default function ProfileCard({
     </div>
   );
 }
+
