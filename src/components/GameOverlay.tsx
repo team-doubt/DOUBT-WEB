@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { GamePhase } from "../types/chat";
 import ProfileCard from "./ProfileCard";
 
@@ -25,6 +26,17 @@ export default function GameOverlay({
   voteProgress,
   onProfileClick,
 }: GameOverlayProps) {
+  // Result 단계로 변경될 때 효과음 재생
+  useEffect(() => {
+    if (gamePhase === GamePhase.RESULT) {
+      const audio = new Audio("/src/assets/sounds/error-83494.mp3");
+      audio.volume = 0.5; // 볼륨 조절 (0.0 ~ 1.0)
+      audio.play().catch(() => {
+        // 오디오 재생 실패 시 무시 (브라우저 정책으로 인한 실패 가능)
+      });
+    }
+  }, [gamePhase]);
+
   return (
     <>
       {/* 전환 효과 오버레이 */}
@@ -59,7 +71,12 @@ export default function GameOverlay({
         </h2>
         <h3 className="font-Zodiak text-[2.25rem] font-zodiak underline text-[#8B8A8A] font-bold cursor-pointer select-none">
           {gamePhase === GamePhase.RESULT
-            ? "Be More Doubtful"
+            ? resultRedIdxs.length > 0
+              ? `AI는 ${resultRedIdxs
+                  .map((i) => users[i]?.username)
+                  .filter(Boolean)
+                  .join(", ")} 입니다!`
+              : "Be More Doubtful"
             : "I think everyone is Human."}
         </h3>
 
@@ -77,7 +94,6 @@ export default function GameOverlay({
               gamePhase={gamePhase}
               isSelected={voteTargets.includes(idx)}
               isAI={resultRedIdxs.includes(idx)}
-              doubtAngle={0}
               onClick={() => onProfileClick(idx)}
             />
           ))}
@@ -90,7 +106,6 @@ export default function GameOverlay({
             isSelected={false}
             isAI={false}
             isMyProfile={true}
-            doubtAngle={0}
           />
         </section>
 
@@ -102,18 +117,6 @@ export default function GameOverlay({
             max={1}
             aria-label="투표 진행률"
           />
-        )}
-
-        {/* 결과 텍스트 */}
-        {gamePhase === GamePhase.RESULT && resultRedIdxs.length > 0 && (
-          <output className="mt-8 text-white text-center">
-            AI는{" "}
-            {resultRedIdxs
-              .map((i) => users[i]?.username)
-              .filter(Boolean)
-              .join(", ")}{" "}
-            입니다!
-          </output>
         )}
       </aside>
     </>
