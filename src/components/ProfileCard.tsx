@@ -58,7 +58,7 @@ export default function ProfileCard({
           alt=""
           className="absolute pb-[60px] left-1/2 w-[1200px] h-[200px] select-none"
           style={{
-            transform: `translateX(-50%) rotate(${doubtAngle}deg)`,
+            transform: `translateX(-50%) scale(1.3) rotate(${doubtAngle}deg)`,
           }}
         />
       )}
