@@ -15,6 +15,6 @@ export const MY_USER = { avatar: yellowProfile, name: "노이만" };
 
 export const GAME_CONFIG = {
   CHAT_DURATION: 0.1 * 60 * 1000, // 6초 (개발용)
-  VOTE_DURATION: 60000, // 1분
+  VOTE_DURATION: 10000, // 1분
   MAX_VOTE_TARGETS: 5,
 } as const;

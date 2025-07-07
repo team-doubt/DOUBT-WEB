@@ -97,44 +97,16 @@ export default function Chat() {
   return (
     <>
       <Header onTimeEnd={handleTimeEnd} endTime={endTime} />
-      <div
-        style={{
-          width: "100vw",
-          height: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          background: "none",
-        }}
-      >
+      <div className="w-screen h-screen flex justify-center items-center bg-none">
         <div
-          className="mt-12 w-[700px] h-[calc(100vh-48px)] flex flex-col overflow-hidden relative bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage:
-              gamePhase === GamePhase.RESULT
-                ? "url('/result_bg.svg')"
-                : "url('/bg.svg')",
-          }}
+          className={`mt-12 w-[700px] h-[calc(100vh-48px)] flex flex-col overflow-hidden relative bg-cover bg-center bg-no-repeat ${
+            gamePhase === GamePhase.RESULT
+              ? "bg-[url('/result_bg.svg')]"
+              : "bg-[url('/bg.svg')]"
+          }`}
         >
-          <div
-            style={{
-              flex: 1,
-              display: "flex",
-              flexDirection: "column",
-              overflowY: "auto",
-              scrollbarWidth: "none",
-              scrollBehavior: "smooth",
-              padding: "32px 16px 96px 16px",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "8px",
-                minHeight: "min-content",
-              }}
-            >
+          <div className="flex-1 flex flex-col overflow-y-auto [scrollbar-width:none] [scroll-behavior:smooth] p-8 pb-24">
+            <div className="flex flex-col gap-2 min-h-min">
               {messages.map((msg, idx) => (
                 <Chatbox
                   key={`mine-${idx}`}
@@ -152,16 +124,7 @@ export default function Chat() {
               <div id="chat-bottom" />
             </div>
           </div>
-          <div
-            style={{
-              position: "absolute",
-              left: 0,
-              bottom: 8,
-              width: "100%",
-              padding: "0 16px 16px 16px",
-              background: "transparent",
-            }}
-          >
+          <div className="absolute left-0 bottom-2 w-full px-4 pb-4 bg-transparent">
             <TextInput onSend={handleSend} disabled={isGameActive} />
           </div>
           {isGameActive && (
@@ -169,126 +132,67 @@ export default function Chat() {
               <span className="overlay-text">
                 {gamePhase === GamePhase.RESULT ? "Result" : "Who's AI?"}
               </span>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  gap: 24,
-                  marginTop: 32,
-                }}
-              >
+              <div className="flex flex-row gap-6 mt-8">
                 {USERS.map((user, idx) => (
                   <div
                     key={idx}
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      position: "relative",
-                      cursor:
-                        gamePhase === GamePhase.RESULT ? "default" : "pointer",
-                    }}
+                    className={`flex flex-col items-center relative ${
+                      gamePhase === GamePhase.RESULT
+                        ? "cursor-default"
+                        : "cursor-pointer"
+                    }`}
                     onClick={() => handleProfileClick(idx)}
                   >
                     {voteTargets.includes(idx) && (
                       <img
                         src={sign}
                         alt=""
+                        className="absolute pb-[60px] left-1/2 w-[800px] h-[200px]"
                         style={{
-                          position: "absolute",
-                          paddingBottom: 60,
-                          left: "50%",
                           transform: `translateX(-50%) rotate(${generateDoubtAngle(
                             idx
                           )}deg)`,
-                          width: 800,
-                          height: 200,
                         }}
                       />
                     )}
                     <div
-                      style={{
-                        width: 128,
-                        height: 128,
-                        overflow: "hidden",
-                        scrollbarWidth: "none",
-                        background:
-                          gamePhase === GamePhase.RESULT &&
-                          resultRedIdxs.includes(idx)
-                            ? "#ff0000"
-                            : "#fff",
-                        marginBottom: 8,
-                      }}
+                      className={`w-32 h-32 overflow-hidden [scrollbar-width:none] mb-2 ${
+                        gamePhase === GamePhase.RESULT &&
+                        resultRedIdxs.includes(idx)
+                          ? "bg-red-500"
+                          : "bg-white"
+                      }`}
                     >
                       <img
                         src={user.avatar}
                         alt={user.username}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                        }}
+                        className="w-full h-full object-cover"
                       />
                     </div>
                   </div>
                 ))}
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    position: "relative",
-                    cursor: "not-allowed",
-                    opacity: 0.5,
-                  }}
-                >
-                  <div
-                    style={{
-                      width: 128,
-                      height: 128,
-                      overflow: "hidden",
-                      scrollbarWidth: "none",
-                      background: "#fff",
-                      marginBottom: 8,
-                    }}
-                  >
+                <div className="flex flex-col items-center relative cursor-not-allowed opacity-50">
+                  <div className="w-32 h-32 overflow-hidden [scrollbar-width:none] bg-white mb-2">
                     <img
                       src={myAvatar}
                       alt={myUsername}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                      }}
+                      className="w-full h-full object-cover"
                     />
                   </div>
                 </div>
               </div>
               {gamePhase === GamePhase.VOTING && (
-                <div
-                  style={{
-                    width: 360,
-                    height: 12,
-                    background: "rgba(255,255,255,0.2)",
-                    borderRadius: 6,
-                    marginTop: 40,
-                    overflow: "hidden",
-                  }}
-                >
+                <div className="w-[360px] h-3 bg-white/20 rounded-md mt-10 overflow-hidden">
                   <div
+                    className="h-full bg-white rounded-md"
                     style={{
-                      height: "100%",
                       width: `${voteProgress * 100}%`,
-                      background: "#ffffff",
-                      borderRadius: 6,
                     }}
                   />
                 </div>
               )}
               {gamePhase === GamePhase.RESULT && resultRedIdxs.length > 0 && (
-                <div
-                  style={{ marginTop: 32, color: "white", textAlign: "center" }}
-                >
+                <div className="mt-8 text-white text-center">
                   AI는{" "}
                   {resultRedIdxs
                     .map((i) => USERS[i]?.username)
