@@ -5,34 +5,37 @@ import ai from "../assets/ai.svg";
 interface ProfileCardProps {
   avatar: string;
   username: string;
-  idx: number;
   gamePhase: GamePhase;
   isSelected: boolean;
   isAI: boolean;
   isMyProfile?: boolean;
+  doubtAngle: number;
   onClick?: () => void;
 }
-
-// 투표 대상별 고정된 랜덤 각도를 생성하는 함수
-const generateDoubtAngle = (targetIndex: number) => {
-  // targetIndex를 시드로 사용하여 일관된 랜덤값 생성
-  const seed = targetIndex * 123.456;
-  const pseudoRandom = Math.sin(seed) * 10000;
-  return (pseudoRandom - Math.floor(pseudoRandom)) * 36 - 18;
-};
 
 export default function ProfileCard({
   avatar,
   username,
-  idx,
   gamePhase,
   isSelected,
   isAI,
   isMyProfile = false,
+  doubtAngle,
   onClick,
 }: ProfileCardProps) {
   const isClickable = gamePhase !== GamePhase.RESULT && !isMyProfile;
-  const doubtAngle = generateDoubtAngle(idx);
+
+  const handleClick = () => {
+    if (isClickable && onClick) {
+      // 클릭 효과음 재생
+      const audio = new Audio("/src/assets/sounds/ui-mouse-click-366460.mp3");
+      audio.volume = 0.3; // 볼륨 조절 (0.0 ~ 1.0)
+      audio.play().catch(() => {
+        // 오디오 재생 실패 시 무시 (브라우저 정책으로 인한 실패 가능)
+      });
+      onClick();
+    }
+  };
 
   return (
     <div
@@ -43,7 +46,7 @@ export default function ProfileCard({
           ? "cursor-default"
           : "cursor-pointer"
       }`}
-      onClick={isClickable ? onClick : undefined}
+      onClick={handleClick}
     >
       {isSelected && (
         <img
