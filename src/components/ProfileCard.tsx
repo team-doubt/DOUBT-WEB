@@ -25,7 +25,7 @@ export default function ProfileCard({
   const isClickable = gamePhase !== GamePhase.RESULT && !isMyProfile;
 
   // 랜덤 각도를 한 번만 생성하고 고정 (-20도 ~ 20도)
-  const [doubtAngle] = useState(() => Math.floor(Math.random() * 41) - 20);
+  const [doubtAngle] = useState(() => Math.floor(Math.random() * 41) - 8);
 
   const handleClick = () => {
     if (isClickable && onClick) {
