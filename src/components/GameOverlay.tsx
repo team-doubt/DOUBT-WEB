@@ -32,7 +32,20 @@ export default function GameOverlay({
         <div className="transition-overlay animate-result-transition" />
       )}
 
-      <aside className="overlay" style={{ flexDirection: "column" }}>
+      <aside
+        className="overlay"
+        style={{
+          flexDirection: "column",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          margin: 0,
+          padding: 0,
+          transform: "none",
+        }}
+      >
         {/* 배경 레이어 */}
         {gamePhase === GamePhase.RESULT && (
           <div
@@ -61,10 +74,10 @@ export default function GameOverlay({
               key={idx}
               avatar={user.avatar}
               username={user.username}
-              idx={idx}
               gamePhase={gamePhase}
               isSelected={voteTargets.includes(idx)}
               isAI={resultRedIdxs.includes(idx)}
+              doubtAngle={0}
               onClick={() => onProfileClick(idx)}
             />
           ))}
@@ -73,11 +86,11 @@ export default function GameOverlay({
           <ProfileCard
             avatar={myUser.avatar}
             username={myUser.username}
-            idx={users.length}
             gamePhase={gamePhase}
             isSelected={false}
             isAI={false}
             isMyProfile={true}
+            doubtAngle={0}
           />
         </section>
 
