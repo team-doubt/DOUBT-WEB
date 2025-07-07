@@ -86,27 +86,55 @@ export default function GameOverlay({
           aria-label="플레이어 프로필 목록"
         >
           {/* 다른 플레이어들 */}
-          {users.map((user, idx) => (
-            <ProfileCard
-              key={idx}
-              avatar={user.avatar}
-              username={user.username}
-              gamePhase={gamePhase}
-              isSelected={voteTargets.includes(idx)}
-              isAI={resultRedIdxs.includes(idx)}
-              onClick={() => onProfileClick(idx)}
-            />
-          ))}
+          {users.map((user, idx) => {
+            // result 화면에서만 표시할 텍스트와 색상 결정
+            let roleLabel = "";
+            let roleColor = "";
+            if (gamePhase === GamePhase.RESULT) {
+              const isAI = resultRedIdxs.includes(idx);
+              const isSelected = voteTargets.includes(idx);
+              // AI 맞춤(선택했고 AI) 또는 Human을 선택하지 않음(선택X, Human)
+              if ((isAI && isSelected) || (!isAI && !isSelected)) {
+                roleColor = "text-white";
+              } else {
+                // AI인데 선택 안함, 또는 Human인데 선택함
+                roleColor = "text-red-500";
+              }
+              roleLabel = isAI ? "AI" : "Human";
+            }
+            return (
+              <div key={idx} className="flex flex-col items-center">
+                <ProfileCard
+                  avatar={user.avatar}
+                  username={user.username}
+                  gamePhase={gamePhase}
+                  isSelected={voteTargets.includes(idx)}
+                  isAI={resultRedIdxs.includes(idx)}
+                  onClick={() => onProfileClick(idx)}
+                />
+                {/* result 화면에서만 표시 */}
+                {gamePhase === GamePhase.RESULT && (
+                  <span className={`mt-2 text-2xl font-bold font-Zodiak ${roleColor}`}>{roleLabel}</span>
+                )}
+              </div>
+            );
+          })}
 
           {/* 내 프로필 */}
-          <ProfileCard
-            avatar={myUser.avatar}
-            username={myUser.username}
-            gamePhase={gamePhase}
-            isSelected={false}
-            isAI={false}
-            isMyProfile={true}
-          />
+          <div className="flex flex-col items-center">
+            <ProfileCard
+              avatar={myUser.avatar}
+              username={myUser.username}
+              gamePhase={gamePhase}
+              isSelected={false}
+              isAI={false}
+              isMyProfile={true}
+            />
+            {/* 내 프로필은 항상 Human으로 표시, 흰색 */}
+            {gamePhase === GamePhase.RESULT && (
+              <span className="mt-2 text-2xl font-bold font-Zodiak text-white">Human</span>
+            )}
+          </div>
         </section>
 
         {/* 투표 진행률 */}
