@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import send from "../assets/send.svg";
 
 interface TextInputProps {
     onSend?: (msg: string) => void;
@@ -75,7 +76,7 @@ export default function TextInput({ onSend, disabled }: TextInputProps) {
                     outline: 'none',
                 }}
             >
-                <span style={{ color: '#6B7280', fontSize: 20 }}>⌲</span>
+                <img src={send} alt="send" className="w-6 h-6 text-[#6B7280]" />
             </button>
         </div>
     );

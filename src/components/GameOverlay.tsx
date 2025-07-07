@@ -98,7 +98,7 @@ export default function GameOverlay({
                 roleColor = "text-white";
               } else {
                 // AI인데 선택 안함, 또는 Human인데 선택함
-                roleColor = "text-red-500";
+                roleColor = "text-[#FF595B]";
               }
               roleLabel = isAI ? "AI" : "Human";
             }

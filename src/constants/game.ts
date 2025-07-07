@@ -4,14 +4,20 @@ import redProfile from "../assets/profile/euler/human.svg";
 import whiteProfile from "../assets/profile/turing/human.svg";
 import yellowProfile from "../assets/profile/neumann/human.svg";
 
+import blueBot from "../assets/profile/pascal/bot.svg";
+import greenBot from "../assets/profile/gauss/bot.svg";
+import redBot from "../assets/profile/euler/bot.svg";
+import whiteBot from "../assets/profile/turing/bot.svg";
+import yellowBot from "../assets/profile/neumann/bot.svg";
+
 export const USERS = [
-  { avatar: blueProfile, name: "파스칼" },
-  { avatar: greenProfile, name: "가우스" },
-  { avatar: redProfile, name: "오일러" },
-  { avatar: whiteProfile, name: "튜링" },
+  { avatar: blueProfile,  name: "파스칼", bot: blueBot },
+  { avatar: greenProfile, name: "가우스", bot: greenBot },
+  { avatar: redProfile, name: "오일러", bot: redBot },
+  { avatar: whiteProfile, name: "튜링", bot: whiteBot },
 ];
 
-export const MY_USER = { avatar: yellowProfile, name: "노이만" };
+export const MY_USER = { avatar: yellowProfile, bot: yellowBot, name: "노이만" };
 
 export const GAME_CONFIG = {
   CHAT_DURATION: 0.1 * 60 * 1000, // 6초 (개발용)
