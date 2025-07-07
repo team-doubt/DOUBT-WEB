@@ -61,7 +61,7 @@ export default function GameOverlay({
       {/* 투표 진행률 */}
       {gamePhase === GamePhase.VOTING && (
         <progress
-          className="w-[46rem] h-3 mt-10 appearance-none [&::-webkit-progress-bar]:bg-[#161515]/90 [&::-webkit-progress-bar]:rounded-md [&::-webkit-progress-value]:bg-white [&::-webkit-progress-value]:rounded-md [&::-moz-progress-bar]:bg-white [&::-moz-progress-bar]:rounded-md"
+          className="w-[46rem] h-3 mt-10 appearance-none [&::-webkit-progress-bar]:bg-[#8B8A8A]/90 [&::-webkit-progress-bar]:rounded-md [&::-webkit-progress-value]:bg-white [&::-webkit-progress-value]:rounded-md [&::-moz-progress-bar]:bg-white [&::-moz-progress-bar]:rounded-md"
           value={voteProgress}
           max={1}
         />

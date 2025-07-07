@@ -36,11 +36,6 @@ export default function Chat() {
     }
   }, [messages]);
 
-  // 게임 페이즈 관리
-  const handleTimeEnd = () => {
-    setGamePhase(GamePhase.VOTING);
-  };
-
   // 투표 단계 효과
   useEffect(() => {
     if (gamePhase !== GamePhase.VOTING) return;
@@ -84,7 +79,7 @@ export default function Chat() {
 
   return (
     <>
-      <Header onTimeEnd={handleTimeEnd} endTime={endTime} />
+      <Header onTimeEnd={()=>setGamePhase(GamePhase.VOTING)} endTime={endTime} />
       <div className="w-screen h-screen flex justify-center items-center bg-none">
         <div
           className={`mt-12 w-[700px] h-[calc(100vh-48px)] flex flex-col overflow-hidden relative bg-cover bg-center bg-no-repeat ${
