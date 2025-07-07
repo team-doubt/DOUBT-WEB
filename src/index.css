@@ -33,7 +33,6 @@ h1 {
   line-height: 1.1;
 }
 
-
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
@@ -63,23 +62,30 @@ h1 {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0,0,0,0.7);
+  background: #161515c7;
   opacity: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
   animation: fadeIn 1s forwards;
-  backdrop-filter: blur(6px);
+  /* backdrop-filter: blur(6px); */
 }
 
 @keyframes fadeIn {
-  to { opacity: 1; }
+  to {
+    opacity: 1;
+  }
 }
 
 .overlay-text {
   color: #fff;
-  font-size: 3.5rem;
+  font-size: 6rem;
   font-weight: bold;
-  font-family: 'Zodiak', sans-serif;
+  font-family: "Zodiak", sans-serif;
+  line-height: 100%;
+}
+
+.font-Zodiak {
+  font-family: "Zodiak", sans-serif;
 }

@@ -27,9 +27,22 @@ export default function GameOverlay({
 }: GameOverlayProps) {
   return (
     <aside className="overlay" style={{ flexDirection: "column" }}>
+      {/* 배경 레이어 */}
+      {gamePhase === GamePhase.RESULT && (
+        <div
+          className="absolute inset-0 bg-[url('/src/assets/background/result.png')] bg-cover bg-center bg-no-repeat"
+          style={{ zIndex: -1 }}
+        />
+      )}
+
       <h2 className="overlay-text">
         {gamePhase === GamePhase.RESULT ? "Result" : "Who's AI?"}
       </h2>
+      <h3 className="font-Zodiak text-[2.25rem] font-zodiak underline text-[#8B8A8A] font-bold cursor-pointer select-none">
+        {gamePhase === GamePhase.RESULT
+          ? "Be More Doubtful"
+          : "I think everyone is Human."}
+      </h3>
 
       <section
         className="flex flex-row gap-6 mt-8"
@@ -65,7 +78,7 @@ export default function GameOverlay({
       {/* 투표 진행률 */}
       {gamePhase === GamePhase.VOTING && (
         <progress
-          className="w-[46rem] h-3 mt-10 appearance-none [&::-webkit-progress-bar]:bg-[#8B8A8A]/90 [&::-webkit-progress-bar]:rounded-md [&::-webkit-progress-value]:bg-white [&::-webkit-progress-value]:rounded-md [&::-moz-progress-bar]:bg-white [&::-moz-progress-bar]:rounded-md"
+          className="w-[46rem] h-3 mt-6 appearance-none [&::-webkit-progress-bar]:bg-[#8B8A8A]/90 [&::-webkit-progress-bar]:rounded-md [&::-webkit-progress-value]:bg-white [&::-webkit-progress-value]:rounded-md [&::-moz-progress-bar]:bg-white [&::-moz-progress-bar]:rounded-md"
           value={voteProgress}
           max={1}
           aria-label="투표 진행률"

@@ -87,7 +87,7 @@ export default function Chat() {
         <section
           className={`mt-12 w-[700px] h-[calc(100vh-48px)] flex flex-col overflow-hidden relative bg-cover bg-center bg-no-repeat ${
             gamePhase === GamePhase.RESULT
-              ? "bg-[url('/result_bg.svg')]"
+              ? "bg-[url('/src/assets/background/result.png')]"
               : "bg-[url('/bg.svg')]"
           }`}
         >
@@ -116,19 +116,19 @@ export default function Chat() {
               disabled={gamePhase !== GamePhase.CHATTING}
             />
           </footer>
-          {gamePhase !== GamePhase.CHATTING && (
-            <GameOverlay
-              gamePhase={gamePhase}
-              users={USERS}
-              myUser={myUser}
-              voteTargets={voteTargets}
-              resultRedIdxs={resultRedIdxs}
-              voteProgress={voteProgress}
-              onProfileClick={handleProfileClick}
-            />
-          )}
         </section>
       </main>
+      {gamePhase !== GamePhase.CHATTING && (
+        <GameOverlay
+          gamePhase={gamePhase}
+          users={USERS}
+          myUser={myUser}
+          voteTargets={voteTargets}
+          resultRedIdxs={resultRedIdxs}
+          voteProgress={voteProgress}
+          onProfileClick={handleProfileClick}
+        />
+      )}
     </>
   );
 }
