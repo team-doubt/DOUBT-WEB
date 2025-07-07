@@ -78,6 +78,32 @@ h1 {
   }
 }
 
+@keyframes resultTransition {
+  0% {
+    opacity: 1;
+    background: rgba(0, 0, 0, 1);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.transition-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 1);
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.animate-result-transition {
+  animation: resultTransition 2s ease-in-out forwards;
+}
+
 .overlay-text {
   color: #fff;
   font-size: 6rem;
