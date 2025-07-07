@@ -6,7 +6,6 @@ import GameOverlay from "../components/GameOverlay";
 import { useChatStore } from "../stores/chatStore";
 import { GamePhase } from "../types/chat";
 import { GAME_CONFIG, USERS as GAME_USERS, MY_USER } from "../constants/game";
-
 // 게임 참여자들 (상수에서 바로 사용)
 const USERS = GAME_USERS.map((user) => ({
   avatar: user.avatar,
