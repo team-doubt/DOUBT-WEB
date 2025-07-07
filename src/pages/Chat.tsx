@@ -3,9 +3,15 @@ import Chatbox from "../components/Chatbox";
 import TextInput from "../components/TextInput";
 import Header from "../components/Header";
 import GameOverlay from "../components/GameOverlay";
-import { useChatStore } from "../stores/chatStore";
+import {
+  useChatStore,
+  connectSocket,
+  disconnectSocket,
+  sendMessage,
+} from "../stores/chatStore";
 import { GamePhase } from "../types/chat";
 import { GAME_CONFIG, USERS as GAME_USERS, MY_USER } from "../constants/game";
+
 // 게임 참여자들 (상수에서 바로 사용)
 const USERS = GAME_USERS.map((user) => ({
   avatar: user.avatar,
@@ -15,16 +21,43 @@ const USERS = GAME_USERS.map((user) => ({
 // 노이만(노랑)이 me
 const myUser = { avatar: MY_USER.avatar, username: MY_USER.name };
 
+// 수학자 이름별 아바타 매핑
+const getAvatarByName = (name: string): string => {
+  const userMap: { [key: string]: string } = {
+    파스칼: GAME_USERS[0].avatar,
+    가우스: GAME_USERS[1].avatar,
+    오일러: GAME_USERS[2].avatar,
+    튜링: GAME_USERS[3].avatar,
+    노이만: MY_USER.avatar,
+  };
+  return userMap[name] || myUser.avatar;
+};
+
 export default function Chat() {
-  const { messages, gamePhase, addMessage, setGamePhase } = useChatStore();
+  const {
+    messages,
+    gamePhase,
+    myName,
+    connectedUsers,
+    isConnected,
+    setGamePhase,
+  } = useChatStore();
 
   const [endTime] = useState(() => Date.now() + GAME_CONFIG.CHAT_DURATION);
   const [voteProgress, setVoteProgress] = useState(0);
   const [voteTargets, setVoteTargets] = useState<number[]>([]);
   const [resultRedIdxs, setResultRedIdxs] = useState<number[]>([]);
 
+  // Socket.IO 연결
+  useEffect(() => {
+    connectSocket();
+    return () => {
+      disconnectSocket();
+    };
+  }, []);
+
   const handleSend = (msg: string) => {
-    addMessage(msg);
+    sendMessage(msg);
   };
 
   // 새 메시지 추가 시 자동 스크롤 및 알림음 재생
@@ -93,6 +126,17 @@ export default function Chat() {
         onTimeEnd={() => setGamePhase(GamePhase.VOTING)}
         endTime={endTime}
       />
+      {/* 연결 상태 표시 */}
+      <div className="fixed top-4 right-4 z-50">
+        <div
+          className={`px-3 py-1 rounded-full text-sm font-semibold ${
+            isConnected ? "bg-green-500 text-white" : "bg-red-500 text-white"
+          }`}
+        >
+          {isConnected ? "연결됨" : "연결 중..."}
+          {myName && isConnected && ` (${myName})`}
+        </div>
+      </div>
       <main className="w-screen h-screen flex justify-center items-center bg-none">
         <section
           className={`mt-12 w-[700px] h-[calc(100vh-48px)] flex flex-col overflow-hidden relative bg-cover bg-center bg-no-repeat ${
@@ -105,15 +149,22 @@ export default function Chat() {
             <div className="flex flex-col gap-2 min-h-min">
               {messages.map((msg, idx) => (
                 <Chatbox
-                  key={`mine-${idx}`}
-                  message={msg}
-                  username={myUser.username}
-                  avatar={myUser.avatar}
-                  time={new Date().toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                  isMine={true}
+                  key={`message-${idx}`}
+                  message={msg.message}
+                  username={msg.name}
+                  avatar={getAvatarByName(msg.name)}
+                  time={
+                    msg.timestamp
+                      ? new Date(msg.timestamp).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })
+                      : new Date().toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })
+                  }
+                  isMine={msg.isMine}
                 />
               ))}
               {/* 이 요소가 새 메시지 추가 시 자동 스크롤 타겟 */}
