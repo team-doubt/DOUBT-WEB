@@ -26,12 +26,16 @@ export default function GameOverlay({
   onProfileClick,
 }: GameOverlayProps) {
   return (
-    <div className="overlay" style={{ flexDirection: "column" }}>
-      <span className="overlay-text">
+    <aside className="overlay" style={{ flexDirection: "column" }}>
+      <h2 className="overlay-text">
         {gamePhase === GamePhase.RESULT ? "Result" : "Who's AI?"}
-      </span>
+      </h2>
 
-      <div className="flex flex-row gap-6 mt-8">
+      <section
+        className="flex flex-row gap-6 mt-8"
+        role="group"
+        aria-label="플레이어 프로필 목록"
+      >
         {/* 다른 플레이어들 */}
         {users.map((user, idx) => (
           <ProfileCard
@@ -56,7 +60,7 @@ export default function GameOverlay({
           isAI={false}
           isMyProfile={true}
         />
-      </div>
+      </section>
 
       {/* 투표 진행률 */}
       {gamePhase === GamePhase.VOTING && (
@@ -64,20 +68,21 @@ export default function GameOverlay({
           className="w-[46rem] h-3 mt-10 appearance-none [&::-webkit-progress-bar]:bg-[#8B8A8A]/90 [&::-webkit-progress-bar]:rounded-md [&::-webkit-progress-value]:bg-white [&::-webkit-progress-value]:rounded-md [&::-moz-progress-bar]:bg-white [&::-moz-progress-bar]:rounded-md"
           value={voteProgress}
           max={1}
+          aria-label="투표 진행률"
         />
       )}
 
       {/* 결과 텍스트 */}
       {gamePhase === GamePhase.RESULT && resultRedIdxs.length > 0 && (
-        <div className="mt-8 text-white text-center">
+        <output className="mt-8 text-white text-center">
           AI는{" "}
           {resultRedIdxs
             .map((i) => users[i]?.username)
             .filter(Boolean)
             .join(", ")}{" "}
           입니다!
-        </div>
+        </output>
       )}
-    </div>
+    </aside>
   );
 }

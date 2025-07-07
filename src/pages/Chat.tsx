@@ -79,16 +79,19 @@ export default function Chat() {
 
   return (
     <>
-      <Header onTimeEnd={()=>setGamePhase(GamePhase.VOTING)} endTime={endTime} />
-      <div className="w-screen h-screen flex justify-center items-center bg-none">
-        <div
+      <Header
+        onTimeEnd={() => setGamePhase(GamePhase.VOTING)}
+        endTime={endTime}
+      />
+      <main className="w-screen h-screen flex justify-center items-center bg-none">
+        <section
           className={`mt-12 w-[700px] h-[calc(100vh-48px)] flex flex-col overflow-hidden relative bg-cover bg-center bg-no-repeat ${
             gamePhase === GamePhase.RESULT
               ? "bg-[url('/result_bg.svg')]"
               : "bg-[url('/bg.svg')]"
           }`}
         >
-          <div className="flex-1 flex flex-col overflow-y-auto [scrollbar-width:none] [scroll-behavior:smooth] p-8 pb-24">
+          <article className="flex-1 flex flex-col overflow-y-auto [scrollbar-width:none] [scroll-behavior:smooth] p-8 pb-24">
             <div className="flex flex-col gap-2 min-h-min">
               {messages.map((msg, idx) => (
                 <Chatbox
@@ -106,13 +109,13 @@ export default function Chat() {
               {/* 이 요소가 새 메시지 추가 시 자동 스크롤 타겟 */}
               <div id="chat-bottom" />
             </div>
-          </div>
-          <div className="absolute left-0 bottom-2 w-full px-4 pb-4 bg-transparent">
+          </article>
+          <footer className="absolute left-0 bottom-2 w-full px-4 pb-4 bg-transparent">
             <TextInput
               onSend={handleSend}
               disabled={gamePhase !== GamePhase.CHATTING}
             />
-          </div>
+          </footer>
           {gamePhase !== GamePhase.CHATTING && (
             <GameOverlay
               gamePhase={gamePhase}
@@ -124,8 +127,8 @@ export default function Chat() {
               onProfileClick={handleProfileClick}
             />
           )}
-        </div>
-      </div>
+        </section>
+      </main>
     </>
   );
 }
