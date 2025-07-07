@@ -1,8 +1,8 @@
-import blueProfile from "../assets/blue.svg";
-import greenProfile from "../assets/green.svg";
-import redProfile from "../assets/red.svg";
-import whiteProfile from "../assets/white.svg";
-import yellowProfile from "../assets/yellow.png";
+import blueProfile from "../assets/profile/pascal/human.svg";
+import greenProfile from "../assets/profile/gauss/human.svg";
+import redProfile from "../assets/profile/euler/human.svg";
+import whiteProfile from "../assets/profile/turing/human.svg";
+import yellowProfile from "../assets/profile/neumann/human.svg";
 
 export const USERS = [
   { avatar: blueProfile, name: "파스칼" },
