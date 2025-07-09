@@ -11,6 +11,7 @@ import {
 } from "../stores/chatStore";
 import { GamePhase } from "../types/chat";
 import { GAME_CONFIG, USERS as GAME_USERS, MY_USER } from "../constants/game";
+import systemAvatar from "../assets/profile/system/system.png";
 
 // 게임 참여자들 (상수에서 바로 사용)
 const USERS = GAME_USERS.map((user) => ({
@@ -29,19 +30,16 @@ const getAvatarByName = (name: string): string => {
     오일러: GAME_USERS[2].avatar,
     튜링: GAME_USERS[3].avatar,
     노이만: MY_USER.avatar,
+    시스템: systemAvatar, // 서버에서 온 시스템 메시지
   };
-  return userMap[name] || myUser.avatar;
+
+  // 만약 사용자 맵에 없는 이름이라면 시스템 아바타 사용 (서버 메시지로 간주)
+  return userMap[name] || systemAvatar;
 };
 
 export default function Chat() {
-  const {
-    messages,
-    gamePhase,
-    myName,
-    connectedUsers,
-    isConnected,
-    setGamePhase,
-  } = useChatStore();
+  const { messages, gamePhase, myName, isConnected, setGamePhase } =
+    useChatStore();
 
   const [endTime] = useState(() => Date.now() + GAME_CONFIG.CHAT_DURATION);
   const [voteProgress, setVoteProgress] = useState(0);
