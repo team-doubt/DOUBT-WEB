@@ -108,13 +108,21 @@ export default function GameOverlay({
                   avatar={user.avatar}
                   username={user.username}
                   gamePhase={gamePhase}
-                  isSelected={voteTargets.includes(idx)}
+                  isSelected={
+                    gamePhase === GamePhase.RESULT
+                      ? false
+                      : voteTargets.includes(idx)
+                  }
                   isAI={resultRedIdxs.includes(idx)}
                   onClick={() => onProfileClick(idx)}
                 />
                 {/* result 화면에서만 표시 */}
                 {gamePhase === GamePhase.RESULT && (
-                  <span className={`mt-2 text-2xl font-bold font-Zodiak ${roleColor}`}>{roleLabel}</span>
+                  <span
+                    className={`mt-2 text-2xl font-bold font-Zodiak ${roleColor}`}
+                  >
+                    {roleLabel}
+                  </span>
                 )}
               </div>
             );
@@ -132,7 +140,9 @@ export default function GameOverlay({
             />
             {/* 내 프로필은 항상 Human으로 표시, 흰색 */}
             {gamePhase === GamePhase.RESULT && (
-              <span className="mt-2 text-2xl font-bold font-Zodiak text-white">Human</span>
+              <span className="mt-2 text-2xl font-bold font-Zodiak text-white">
+                Human
+              </span>
             )}
           </div>
         </section>
