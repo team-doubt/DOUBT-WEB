@@ -1,17 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Chatbox from "../components/Chatbox";
 import TextInput from "../components/TextInput";
 import Header from "../components/Header";
 import GameOverlay from "../components/GameOverlay";
-import {
-  useChatStore,
-  connectSocket,
-  disconnectSocket,
-  sendMessage,
-} from "../stores/chatStore";
+import { useChatStore, sendMessage } from "../stores/chatStore";
 import { GamePhase } from "../types/chat";
 import { GAME_CONFIG, USERS as GAME_USERS, MY_USER } from "../constants/game";
 import systemAvatar from "../assets/profile/system/system.png";
+import { useSocketConnection } from "../hooks/useSocketConnection";
+import { useChatEffects } from "../hooks/useChatEffects";
+import { useGamePhases } from "../hooks/useGamePhases";
 
 // 게임 참여자들 (상수에서 바로 사용)
 const USERS = GAME_USERS.map((user) => ({
@@ -37,6 +35,16 @@ const getAvatarByName = (name: string): string => {
   return userMap[name] || systemAvatar;
 };
 
+// 게임 오버레이를 표시하지 않아야 하는 단계들
+const isOverlayHidden = (phase: GamePhase): boolean => {
+  return phase === GamePhase.CHATTING || phase === GamePhase.AFTERPARTY;
+};
+
+// 채팅 입력이 활성화되어야 하는 단계들
+const isChatEnabled = (phase: GamePhase): boolean => {
+  return phase === GamePhase.CHATTING || phase === GamePhase.AFTERPARTY;
+};
+
 export default function Chat() {
   const { messages, gamePhase, myName, isConnected, setGamePhase } =
     useChatStore();
@@ -46,72 +54,18 @@ export default function Chat() {
   const [voteTargets, setVoteTargets] = useState<number[]>([]);
   const [resultRedIdxs, setResultRedIdxs] = useState<number[]>([]);
 
-  // Socket.IO 연결
-  useEffect(() => {
-    connectSocket();
-    return () => {
-      disconnectSocket();
-    };
-  }, []);
+  // 커스텀 훅들 사용
+  useSocketConnection();
+  useChatEffects(messages);
+  useGamePhases(gamePhase, setGamePhase, setVoteProgress, setResultRedIdxs);
 
   const handleSend = (msg: string) => {
     sendMessage(msg);
   };
 
-  // 새 메시지 추가 시 자동 스크롤 및 알림음 재생
-  useEffect(() => {
-    const chatBottom = document.getElementById("chat-bottom");
-    if (chatBottom) {
-      chatBottom.scrollIntoView({ behavior: "smooth" });
-    }
-
-    // 메시지가 있을 때만 알림음 재생 (첫 로드 시 제외)
-    if (messages.length > 0) {
-      const audio = new Audio(
-        "/src/assets/sounds/new-notification-07-210334.mp3"
-      );
-      audio.volume = 0.4; // 볼륨 조절 (0.0 ~ 1.0)
-      audio.play().catch(() => {
-        // 오디오 재생 실패 시 무시 (브라우저 정책으로 인한 실패 가능)
-      });
-    }
-  }, [messages]);
-
-  // 투표 단계 효과
-  useEffect(() => {
-    if (gamePhase !== GamePhase.VOTING) return;
-
-    setVoteProgress(0);
-    setResultRedIdxs([]);
-    const start = Date.now();
-    const duration = GAME_CONFIG.VOTE_DURATION;
-    let raf: number;
-
-    function tick() {
-      const elapsed = Date.now() - start;
-      const progress = Math.min(elapsed / duration, 1);
-      setVoteProgress(progress);
-      if (progress < 1) {
-        raf = requestAnimationFrame(tick);
-      } else {
-        // 결과 단계로 전환
-        setGamePhase(GamePhase.RESULT);
-        // 1~4개 랜덤 인덱스(중복X)
-        const count = Math.floor(Math.random() * 4) + 1;
-        const idxs = Array.from({ length: 4 }, (_, i) => i);
-        for (let i = idxs.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [idxs[i], idxs[j]] = [idxs[j], idxs[i]];
-        }
-        setResultRedIdxs(idxs.slice(0, count));
-      }
-    }
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [gamePhase, setGamePhase]);
-
   const handleProfileClick = (idx: number) => {
-    if (gamePhase === GamePhase.RESULT) return;
+    if (gamePhase === GamePhase.RESULT || gamePhase === GamePhase.AFTERPARTY)
+      return;
     if (USERS[idx]?.username === myUser.username) return; // 내 프로필은 클릭 불가
     setVoteTargets((prev) =>
       prev.includes(idx) ? prev.filter((i) => i !== idx) : [...prev, idx]
@@ -172,12 +126,12 @@ export default function Chat() {
           <footer className="absolute left-0 bottom-2 w-full px-4 pb-4 bg-transparent">
             <TextInput
               onSend={handleSend}
-              disabled={gamePhase !== GamePhase.CHATTING}
+              disabled={!isChatEnabled(gamePhase)}
             />
           </footer>
         </section>
       </main>
-      {gamePhase !== GamePhase.CHATTING && (
+      {!isOverlayHidden(gamePhase) && (
         <GameOverlay
           gamePhase={gamePhase}
           users={USERS}
