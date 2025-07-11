@@ -67,7 +67,11 @@ export default function GameOverlay({
         )}
 
         <h2 className="overlay-text">
-          {gamePhase === GamePhase.RESULT ? "Result" : "Who's AI?"}
+          {gamePhase === GamePhase.RESULT
+            ? "Result"
+            : gamePhase === GamePhase.AFTERPARTY
+            ? "After Party"
+            : "Who's AI?"}
         </h2>
         <h3 className="font-Zodiak text-[2.25rem] font-zodiak underline text-[#8B8A8A] font-bold cursor-pointer select-none">
           {gamePhase === GamePhase.RESULT
@@ -77,6 +81,8 @@ export default function GameOverlay({
                   .filter(Boolean)
                   .join(", ")} 입니다!`
               : "Be More Doubtful"
+            : gamePhase === GamePhase.AFTERPARTY
+            ? "게임이 끝났습니다! 자유롭게 대화해보세요 😊"
             : "I think everyone is Human."}
         </h3>
 
@@ -109,7 +115,8 @@ export default function GameOverlay({
                   username={user.username}
                   gamePhase={gamePhase}
                   isSelected={
-                    gamePhase === GamePhase.RESULT
+                    gamePhase === GamePhase.RESULT ||
+                    gamePhase === GamePhase.AFTERPARTY
                       ? false
                       : voteTargets.includes(idx)
                   }
