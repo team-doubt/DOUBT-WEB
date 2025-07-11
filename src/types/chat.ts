@@ -9,6 +9,7 @@ export enum GamePhase {
   CHATTING = "chatting",
   VOTING = "voting",
   RESULT = "result",
+  AFTERPARTY = "afterparty", // 뒷풀이 단계
 }
 
 export interface ChatStore {
